@@ -1,0 +1,120 @@
+PS C:\Users\ME\desktop\DEVOP STECHHUB JUNE 1 2026\project17>
+PS C:\Users\ME\desktop\DEVOP STECHHUB JUNE 1 2026\project17> aws --endpoint-url=http://localhost:4566 elbv2 describe-load-balancers --query "LoadBalancers[*].[LoadBalancerName,Scheme,State.Code,DNSName]" --output table
+------------------------------------------------------------------------------------
+|                               DescribeLoadBalancers                              |
++---------+------------------+---------+-------------------------------------------+
+|  ext-alb|  internet-facing |  active |  ext-alb.elb.localhost.localstack.cloud   |
+|  ialb   |  internal        |  active |  ialb.elb.localhost.localstack.cloud      |
++---------+------------------+---------+-------------------------------------------+
+
+PS C:\Users\ME\desktop\DEVOP STECHHUB JUNE 1 2026\project17> aws --endpoint-url=http://localhost:4566 elbv2 describe-target-groups --query "TargetGroups[*].[TargetGroupName,Protocol,Port,HealthCheckPath,TargetType]" --output table
+----------------------------------------------------------------
+|                     DescribeTargetGroups                     |
++----------------+--------+------+-----------------+-----------+
+|  tooling-tgt   |  HTTPS |  443 |  /healthstatus  |  instance |
+|  wordpress-tgt |  HTTPS |  443 |  /healthstatus  |  instance |
+|  nginx-tgt     |  HTTPS |  443 |  /healthstatus  |  instance |
++----------------+--------+------+-----------------+-----------+
+
+PS C:\Users\ME\desktop\DEVOP STECHHUB JUNE 1 2026\project17> $albDns = aws --endpoint-url=http://localhost:4566 elbv2 describe-load-balancers --names ext-alb --query "LoadBalancers[0].DNSName" --output text
+PS C:\Users\ME\desktop\DEVOP STECHHUB JUNE 1 2026\project17> Write-Output "ALB DNS: $albDns"
+ALB DNS: ext-alb.elb.localhost.localstack.cloud
+PS C:\Users\ME\desktop\DEVOP STECHHUB JUNE 1 2026\project17> aws --endpoint-url=http://localhost:4566 route53 list-hosted-zones --output table
+----------------------------------------------------------------------
+|                           ListHostedZones                          |
++--------------------------------------------------------------------+
+||                            HostedZones                           ||
+|+-------------------------+----------------------------------------+|
+||  CallerReference        |  terraform-20261120015656692900000001  ||
+||  Id                     |  /hostedzone/J2XY2PDXZ2NUHWJGG9IQ1F    ||
+||  Name                   |  oyindamola.gq.                        ||
+||  ResourceRecordSetCount |  5                                     ||
+|+-------------------------+----------------------------------------+|
+|||                             Config                             |||
+||+-----------------------+----------------------------------------+||
+|||  Comment              |  Managed by Terraform                  |||
+|||  PrivateZone          |  False                                 |||
+||+-----------------------+----------------------------------------+||
+
+PS C:\Users\ME\desktop\DEVOP STECHHUB JUNE 1 2026\project17> $zoneId = (aws --endpoint-url=http://localhost:4566 route53 list-hosted-zones-by-name --dns-name oyindamola.gq --query "HostedZones[0].Id" --output text) -replace '/hostedzone/',''
+PS C:\Users\ME\desktop\DEVOP STECHHUB JUNE 1 2026\project17> aws --endpoint-url=http://localhost:4566 route53 list-resource-record-sets --hosted-zone-id $zoneId --query "ResourceRecordSets[*].[Name,Type,TTL]" --output table
+-------------------------------------------------------------------------
+|                        ListResourceRecordSets                         |
++---------------------------------------------------+--------+----------+
+|  oyindamola.gq.                                   |  NS    |  172800  |
+|  oyindamola.gq.                                   |  SOA   |  900     |
+|  _d930b28be6c5927595552b219965053e.oyindamola.gq. |  CNAME |  60      |
+|  tooling.oyindamola.gq.                           |  A     |  None    |
+|  wordpress.oyindamola.gq.                         |  A     |  None    |
++---------------------------------------------------+--------+----------+
+
+PS C:\Users\ME\desktop\DEVOP STECHHUB JUNE 1 2026\project17> aws --endpoint-url=http://localhost:4566 kms list-aliases --output table
+-----------------------------------------------------------------------
+|                             ListAliases                             |
++---------------------------------------------------------------------+
+||                              Aliases                              ||
+|+------------------+------------------------------------------------+|
+||  AliasArn        |  arn:aws:kms:us-east-1:000000000000:alias/kms  ||
+||  AliasName       |  alias/kms                                     ||
+||  CreationDate    |  2026-11-19T20:57:01.215821-05:00              ||
+||  LastUpdatedDate |  2026-11-19T20:57:01.215821-05:00              ||
+||  TargetKeyId     |  55d203f0-33b4-41bd-b0f2-27e5b53a36eb          ||
+|+------------------+------------------------------------------------+|
+
+PS C:\Users\ME\desktop\DEVOP STECHHUB JUNE 1 2026\project17> aws --endpoint-url=http://localhost:4566 efs describe-file-systems --query "FileSystems[*].[FileSystemId,Encrypted,KmsKeyId,LifeCycleState]" --output table
+---------------------------------------------------------------------------------------------------------------------
+|                                                DescribeFileSystems                                                |
++-------------+-------+-------------------------------------------------------------------------------+-------------+
+|  fs-fca9f970|  True |  arn:aws:kms:us-east-1:000000000000:key/55d203f0-33b4-41bd-b0f2-27e5b53a36eb  |  available  |
++-------------+-------+-------------------------------------------------------------------------------+-------------+
+
+PS C:\Users\ME\desktop\DEVOP STECHHUB JUNE 1 2026\project17> $efsId = aws --endpoint-url=http://localhost:4566 efs describe-file-systems --query "FileSystems[0].FileSystemId" --output text
+PS C:\Users\ME\desktop\DEVOP STECHHUB JUNE 1 2026\project17> aws --endpoint-url=http://localhost:4566 efs describe-mount-targets --file-system-id $efsId --query "MountTargets[*].[MountTargetId,SubnetId,LifeCycleState]" --output table
+------------------------------------------------------------
+|                   DescribeMountTargets                   |
++----------------+----------------------------+------------+
+|  fsmt-a793f719 |  subnet-8792f53561517e107  |  available |
+|  fsmt-36db056f |  subnet-419a6a3d273db849e  |  available |
++----------------+----------------------------+------------+
+
+PS C:\Users\ME\desktop\DEVOP STECHHUB JUNE 1 2026\project17> aws --endpoint-url=http://localhost:4566 efs describe-access-points --file-system-id $efsId --query "AccessPoints[*].[AccessPointId,RootDirectory.Path]" --output table
+---------------------------------
+|     DescribeAccessPoints      |
++----------------+--------------+
+|  fsap-a26045ba |  /wordpress  |
+|  fsap-40f762d1 |  /tooling    |
++----------------+--------------+
+
+PS C:\Users\ME\desktop\DEVOP STECHHUB JUNE 1 2026\project17> aws --endpoint-url=http://localhost:4566 autoscaling describe-auto-scaling-groups --query "AutoScalingGroups[*].[AutoScalingGroupName,MinSize,MaxSize,DesiredCapacity,HealthCheckType]" --output table
+PS C:\Users\ME\desktop\DEVOP STECHHUB JUNE 1 2026\project17> aws --endpoint-url=http://localhost:4566 ec2 describe-vpcs --query "Vpcs[*].[VpcId,CidrBlock,Tags[?Key=='Name'].Value|[0]]" --output table
+--------------------------------------------------------
+|                     DescribeVpcs                     |
++------------------------+-----------------+-----------+
+|  vpc-024be0aeeefcd0016 |  172.31.0.0/16  |  None     |
+|  vpc-cbbb00ea49201ff60 |  10.0.0.0/16    |  main-vpc |
++------------------------+-----------------+-----------+
+
+PS C:\Users\ME\desktop\DEVOP STECHHUB JUNE 1 2026\project17> aws --endpoint-url=http://localhost:4566 ec2 describe-subnets --query "Subnets[*].[SubnetId,CidrBlock,AvailabilityZone,Tags[?Key=='Name'].Value|[0]]" --output table
+---------------------------------------------------------------------------------
+|                                DescribeSubnets                                |
++---------------------------+-----------------+-------------+-------------------+
+|  subnet-9284d3a70f1e75f44 |  172.31.0.0/20  |  us-east-1a |  None             |
+|  subnet-04db0aee3e494945f |  10.0.0.0/24    |  us-east-1a |  PublicSubnet-0   |
+|  subnet-8792f53561517e107 |  10.0.2.0/24    |  us-east-1a |  PrivateSubnet-0  |
+|  subnet-c3e62ec81856a2615 |  172.31.16.0/20 |  us-east-1b |  None             |
+|  subnet-419a6a3d273db849e |  10.0.3.0/24    |  us-east-1b |  PrivateSubnet-1  |
+|  subnet-a48f010dc93832e58 |  10.0.1.0/24    |  us-east-1b |  PublicSubnet-1   |
+|  subnet-ccd6ceb2999ab2fb9 |  172.31.32.0/20 |  us-east-1c |  None             |
+|  subnet-f2bc272bc6cec3ae3 |  10.0.4.0/24    |  us-east-1c |  PrivateSubnet-2  |
+|  subnet-e95ca26cbf87dfcaf |  172.31.48.0/20 |  us-east-1d |  None             |
+|  subnet-0b4884c7f2035ee03 |  10.0.5.0/24    |  us-east-1d |  PrivateSubnet-3  |
+|  subnet-a02ea345cc411a4ce |  172.31.64.0/20 |  us-east-1e |  None             |
+|  subnet-c2df36d62b654e811 |  172.31.80.0/20 |  us-east-1f |  None             |
++---------------------------+-----------------+-------------+-------------------+
+
+PS C:\Users\ME\desktop\DEVOP STECHHUB JUNE 1 2026\project17>
+
+
+
+
+

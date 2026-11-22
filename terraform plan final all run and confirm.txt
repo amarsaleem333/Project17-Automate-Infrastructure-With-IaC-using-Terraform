@@ -1,0 +1,110 @@
+C:\Users\ME\Desktop\DEVOP STECHHUB JUNE 1 2026\Project17>terraform plan
+data.aws_availability_zones.available: Reading...
+aws_route53_zone.oyindamola: Refreshing state... [id=J2XY2PDXZ2NUHWJGG9IQ1F]
+aws_kms_key.ACS-kms: Refreshing state... [id=55d203f0-33b4-41bd-b0f2-27e5b53a36eb]
+aws_vpc.main: Refreshing state... [id=vpc-cbbb00ea49201ff60]
+aws_acm_certificate.oyindamola: Refreshing state... [id=arn:aws:acm:us-east-1:000000000000:certificate/e18024a8-6104-4075-bc98-c65c43497287]
+data.aws_availability_zones.available: Read complete after 0s [id=us-east-1]
+aws_route53_record.oyindamola["*.oyindamola.gq"]: Refreshing state... [id=J2XY2PDXZ2NUHWJGG9IQ1F__d930b28be6c5927595552b219965053e.oyindamola.gq._CNAME]
+aws_kms_alias.alias: Refreshing state... [id=alias/kms]
+aws_efs_file_system.ACS-efs[0]: Refreshing state... [id=fs-fca9f970]
+aws_efs_access_point.tooling[0]: Refreshing state... [id=fsap-40f762d1]
+aws_efs_access_point.wordpress[0]: Refreshing state... [id=fsap-a26045ba]
+aws_subnet.public[0]: Refreshing state... [id=subnet-04db0aee3e494945f]
+aws_subnet.public[1]: Refreshing state... [id=subnet-a48f010dc93832e58]
+aws_subnet.private[3]: Refreshing state... [id=subnet-0b4884c7f2035ee03]
+aws_subnet.private[1]: Refreshing state... [id=subnet-419a6a3d273db849e]
+aws_subnet.private[0]: Refreshing state... [id=subnet-8792f53561517e107]
+aws_security_group.datalayer-sg: Refreshing state... [id=sg-7ad35f7ee315b7d95]
+aws_lb_target_group.tooling-tgt[0]: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-1:000000000000:targetgroup/tooling-tgt/ba5ce192f8194d41]
+aws_lb_target_group.nginx-tgt[0]: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-1:000000000000:targetgroup/nginx-tgt/74b3845aa2b142b4]
+aws_security_group.ext-alb-sg: Refreshing state... [id=sg-8c5e9f178f43392a9]
+aws_security_group.int-alb-sg: Refreshing state... [id=sg-88b25d6c244872517]
+aws_subnet.private[2]: Refreshing state... [id=subnet-f2bc272bc6cec3ae3]
+aws_lb_target_group.wordpress-tgt[0]: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-1:000000000000:targetgroup/wordpress-tgt/a55f4b15ac864147]
+aws_efs_mount_target.target-1[0]: Refreshing state... [id=fsmt-a793f719]
+aws_efs_mount_target.target-2[0]: Refreshing state... [id=fsmt-36db056f]
+aws_db_subnet_group.acs-rds[0]: Refreshing state... [id=acs-rds]
+aws_lb.ext-alb[0]: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-1:000000000000:loadbalancer/app/ext-alb/fc99250f344b4cda]
+aws_lb.ialb[0]: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-1:000000000000:loadbalancer/app/ialb/63c8b7f5a4d946f5]
+aws_db_instance.acs-rds[0]: Refreshing state... [id=db-A7403B75]
+aws_route53_record.tooling: Refreshing state... [id=J2XY2PDXZ2NUHWJGG9IQ1F_tooling.oyindamola.gq_A]
+aws_route53_record.wordpress: Refreshing state... [id=J2XY2PDXZ2NUHWJGG9IQ1F_wordpress.oyindamola.gq_A]
+aws_lb_listener.nginx-listner[0]: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-1:000000000000:listener/app/ext-alb/fc99250f344b4cda/da1f6acd151a49b6]
+aws_lb_listener.web-listener[0]: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-1:000000000000:listener/app/ialb/63c8b7f5a4d946f5/2f4567cbff51433e]
+aws_lb_listener_rule.tooling-listener[0]: Refreshing state... [id=arn:aws:elasticloadbalancing:us-east-1:000000000000:listener-rule/app/ialb/63c8b7f5a4d946f5/2f4567cbff51433e/df6bda5f2f4541a5]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following
+symbols:
+-/+ destroy and then create replacement
+
+Terraform will perform the following actions:
+
+  # aws_db_instance.acs-rds[0] is tainted, so must be replaced
+-/+ resource "aws_db_instance" "acs-rds" {
+      ~ address                               = "localhost.localstack.cloud" -> (known after apply)
+      ~ arn                                   = "arn:aws:rds:us-east-1:000000000000:db:terraform-20261120021329564000000001" -> (known after apply)
+      ~ availability_zone                     = "us-east-1a" -> (known after apply)
+      ~ backup_retention_period               = 0 -> (known after apply)
+      + backup_target                         = (known after apply)
+      ~ backup_window                         = "13:14-13:44" -> (known after apply)
+      + ca_cert_identifier                    = (known after apply)
+      + character_set_name                    = (known after apply)
+      - customer_owned_ip_enabled             = false -> null
+      + database_insights_mode                = (known after apply)
+      - deletion_protection                   = false -> null
+      - domain_dns_ips                        = [] -> null
+      + domain_fqdn                           = (known after apply)
+      - enabled_cloudwatch_logs_exports       = [] -> null
+      ~ endpoint                              = "localhost.localstack.cloud:4510" -> (known after apply)
+      + engine_lifecycle_support              = (known after apply)
+      ~ engine_version_actual                 = "8.0" -> (known after apply)
+      + hosted_zone_id                        = (known after apply)
+      - iam_database_authentication_enabled   = false -> null
+      ~ id                                    = "db-A7403B75" -> (known after apply)
+      ~ identifier                            = "terraform-20261120021329564000000001" -> (known after apply)
+      ~ identifier_prefix                     = "terraform-" -> (known after apply)
+      ~ iops                                  = 0 -> (known after apply)
+      + kms_key_id                            = (known after apply)
+      + latest_restorable_time                = (known after apply)
+      ~ license_model                         = "general-public-license" -> (known after apply)
+      ~ listener_endpoint                     = [] -> (known after apply)
+      ~ maintenance_window                    = "wed:06:38-wed:07:08" -> (known after apply)
+      ~ master_user_secret                    = [] -> (known after apply)
+      + master_user_secret_kms_key_id         = (known after apply)
+      - max_allocated_storage                 = 0 -> null
+      + monitoring_role_arn                   = (known after apply)
+      ~ multi_az                              = false -> (known after apply)
+      + nchar_character_set_name              = (known after apply)
+      + network_type                          = (known after apply)
+      ~ option_group_name                     = "default.mysql5.6" -> (known after apply)
+      + parameter_group_name                  = (known after apply)
+      + performance_insights_kms_key_id       = (known after apply)
+      ~ performance_insights_retention_period = 0 -> (known after apply)
+      ~ port                                  = 4510 -> (known after apply)
+      + replica_mode                          = (known after apply)
+      ~ replicas                              = [] -> (known after apply)
+      ~ resource_id                           = "db-A7403B75" -> (known after apply)
+      + snapshot_identifier                   = (known after apply)
+      ~ status                                = "failed" -> (known after apply)
+      - storage_encrypted                     = false -> null
+      ~ storage_throughput                    = 0 -> (known after apply)
+        tags                                  = {
+            "Billing-Account" = "1234567890"
+            "Environment"     = "production"
+            "Managed-By"      = "Terraform"
+            "Name"            = "ACS-RDS-MySQL"
+            "Owner-Email"     = "infradev-segun@steghub.com"
+        }
+      + timezone                              = (known after apply)
+        # (27 unchanged attributes hidden)
+    }
+
+Plan: 1 to add, 0 to change, 1 to destroy.
+
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if you run
+"terraform apply" now.
+
+C:\Users\ME\Desktop\DEVOP STECHHUB JUNE 1 2026\Project17>

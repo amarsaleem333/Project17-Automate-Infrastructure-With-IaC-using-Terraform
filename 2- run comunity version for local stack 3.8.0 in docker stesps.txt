@@ -1,0 +1,27 @@
+Run an Open Community Version of LocalStack
+Stop or clear out any old LocalStack containers in your Docker Desktop app.
+
+Open your terminal (PowerShell or Command Prompt) and run this exact command to start version 3.8.0 directly:
+
+PowerShell
+
+
+docker run --rm -d -p 4566:4566 -p 4510-4559:4510-4559 localstack/localstack:3.8.0
+Verification: Open Docker Desktop, go to the Containers tab, and verify that a container named something like pensive_montalcini or similar is running with port 4566 mapped.
+
+Once that container is running, your local mock AWS endpoint is fully active at http://localhost:4566. You can immediately go back to your Terraform folder and run your tflocal apply (or standard terraform apply if you kept your provider endpoints pointed to port 4566) without ever touching an auth token or spending a dime!
+
+
+
+
+
+
+
+
+
+
+
+
+Gemini
+Auto
+

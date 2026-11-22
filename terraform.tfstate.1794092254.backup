@@ -1,0 +1,45 @@
+{
+  "version": 4,
+  "terraform_version": "1.16.6",
+  "serial": 8,
+  "lineage": "5c1ad18b-4528-6696-b1fe-f8715f58ea8a",
+  "outputs": {},
+  "resources": [
+    {
+      "mode": "managed",
+      "type": "aws_iam_user",
+      "name": "terraform_user",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::330714580032:user/terraform",
+            "force_destroy": false,
+            "id": "terraform",
+            "name": "terraform",
+            "path": "/",
+            "permissions_boundary": "",
+            "tags": {
+              "Environment": "dev",
+              "ManagedBy": "Terraform"
+            },
+            "tags_all": {
+              "Environment": "dev",
+              "ManagedBy": "Terraform"
+            },
+            "unique_id": "AIDAU2ABAARAAAV3HAMJY"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "identity": {
+            "account_id": "330714580032",
+            "name": "terraform"
+          },
+          "private": "bnVsbA=="
+        }
+      ]
+    }
+  ],
+  "check_results": null
+}

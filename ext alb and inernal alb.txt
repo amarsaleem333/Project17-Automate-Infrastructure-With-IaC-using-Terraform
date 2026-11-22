@@ -1,0 +1,7 @@
+PS C:\Users\ME\desktop\DEVOP STECHHUB JUNE 1 2026\project17> aws --endpoint-url=http://localhost:4566 elbv2 describe-load-balancers --query "LoadBalancers[*].[LoadBalancerName,Scheme,State.Code,DNSName]" --output table
+------------------------------------------------------------------------------------
+|                               DescribeLoadBalancers                              |
++---------+------------------+---------+-------------------------------------------+
+|  ext-alb|  internet-facing |  active |  ext-alb.elb.localhost.localstack.cloud   |
+|  ialb   |  internal        |  active |  ialb.elb.localhost.localstack.cloud      |
++---------+------------------+---------+-------------------------------------------+

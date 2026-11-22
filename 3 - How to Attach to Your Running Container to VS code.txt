@@ -1,0 +1,21 @@
+How to Attach to Your Running Container Properly:
+Open the VS Code Command Palette:
+Instead of typing in the terminal at the bottom, press Ctrl + Shift + P on your keyboard. (This opens the Command Palette search bar at the top center of your window).
+
+Run the Command:
+Type 
+
+
+Dev Containers: Attach to Running Container 
+
+
+into the search box and select it from the dropdown list.
+
+Select Your Container:
+A list of your active containers will pop up (including your LocalStack container, e.g., friendly_bose). Click on it, and a new VS Code window will open up directly attached inside your container!
+
+
+
+
+
+

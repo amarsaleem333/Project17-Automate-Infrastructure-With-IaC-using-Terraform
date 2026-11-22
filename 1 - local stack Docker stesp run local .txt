@@ -1,0 +1,105 @@
+Here is your step-by-step guide to setting up LocalStack on your local machine and configuring your Terraform workspace to run completely free of charge.
+
+1
+Prerequisites Check
+Ensure Docker Desktop is running
+LocalStack runs inside a Docker container.
+
+Make sure Docker Desktop (or Docker Engine on Linux) is installed and actively running on your machine.
+
+Open your terminal and verify Docker works:
+
+Bash
+
+
+docker --version
+2
+Install LocalStack & Local Terraform Wrapper
+Python pip required
+You will need Python installed on your system. Install the LocalStack CLI and tflocal (the drop-in wrapper that automatically routes your Terraform commands to your local Docker emulator):
+
+Bash
+
+
+pip install localstack terraform-local
+tflocal provides the tflocal command, which acts as an exact alias for terraform except it connects directly to your local emulator instead of real AWS.
+
+3
+Start LocalStack
+Run as a background daemon
+Start your local AWS cloud emulator via Docker:
+
+Bash
+
+
+localstack start -d
+Verify it is running successfully by checking its status:
+
+Bash
+
+
+localstack status
+All core AWS services like VPC, EC2, IAM, S3, and RDS endpoints are now being simulated locally.
+
+4
+Configure Your Terraform Files for LocalStack
+Add the LocalStack provider endpoint overrides
+Because Terraform needs to know to talk to localhost instead of AWS servers, create a providers.tf file (or add to your existing configuration) to override the AWS endpoints to point to LocalStack:
+
+Terraform
+
+
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
+
+provider "aws" {
+  region                      = "us-east-1"
+  access_key                  = "mock_access_key"
+  secret_key                  = "mock_secret_key"
+  skip_credentials_validation = true
+  skip_metadata_api_check     = true
+  skip_requesting_account_id  = true
+
+  endpoints {
+    ec2            = "http://localhost:4566"
+    s3             = "http://localhost:4566"
+    iam            = "http://localhost:4566"
+    sts            = "http://localhost:4566"
+    rds            = "http://localhost:4566"
+    efs            = "http://localhost:4566"
+    elbv2          = "http://localhost:4566"
+    route53        = "http://localhost:4566"
+    acm            = "http://localhost:4566"
+    autoscaling    = "http://localhost:4566"
+    sns            = "http://localhost:4566"
+    kms            = "http://localhost:4566"
+  }
+}
+5
+Initialize and Apply Your Configuration Locally
+Use tflocal instead of terraform
+Navigate to your Terraform project folder where your .tf files reside, and run your standard commands using tflocal:
+
+Initialize workspace:
+
+Bash
+tflocal init
+Review execution plan:
+
+Bash
+
+
+tflocal plan
+Deploy resources locally:
+
+Bash
+
+
+tflocal apply
+Everything will provision inside your local Docker container completely offline and completely free! When you want to tear it down, simply run tflocal destroy.
