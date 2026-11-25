@@ -12,7 +12,7 @@ This project automates a multi-tier AWS network and application architecture usi
 * `alb.tf` — Defines External and Internal Application Load Balancers, target groups, listeners, and rules (conditionally toggled via `enable_pro_services`).
 * `efs.tf` — Defines KMS key/alias, EFS file system, mount targets, and access points (conditionally toggled via `enable_pro_services`).
 * `rds.tf` — Defines the RDS DB subnet group and database instance (conditionally toggled via `enable_pro_services`).
-* `terraform.tfvars` — Local variable overrides and non-committed sensitive inputs (excluded via `.gitignore`).
+  
 
 ## LocalStack Community vs. Pro Handling
 
@@ -24,8 +24,8 @@ LocalStack Community Edition does not support certain Pro-only APIs (such as `el
 ## Step-by-Step Local Workflow
 
 1. **Start LocalStack in Docker Desktop** and verify it is listening on `http://localhost:4566`.
-2. **Ensure `.gitignore` protects local secrets and state**, including `terraform.tfvars`, `.terraform/`, and `*.tfstate*`.
-3. **Initialize and upgrade providers:**
+
+2. **Initialize and upgrade providers:**
    ```powershell
    terraform init -upgrade
 
